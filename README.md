@@ -88,7 +88,7 @@ LIMIT \<count\> [OFFSET \<count\>]
 
 eg.
 
-```
+``` SQL
 SELECT name FROM student WHERE sid IN (SELECT sid FROM enrolled);
 
 # or
@@ -97,3 +97,40 @@ SELECT (SELECT S.name FROM student AS S WHERE S.sid = E.sid) AS sname
 FROM enrolled AS E
 WHERE cid = '15-445';
 ```
+
+## Class 3: Database Storage
+
+**Different Level of Database System:**
+
+- Query Planning
+- Operator Execution
+- Access Methods
+- Buffer Pool Manager
+- Disk Manager
+
+**Disk-Oriented Architectur:** assumes that the primary storage location of database is on non-volatile disk. DBMS's components manage the movement of data between non-volatile and volatile storage.
+
+**Time Cost of:**
+
+- L1 Cache Ref: 0.5ns
+- L2 Cache Ref: 7ns
+- DRAM: 100ns
+- SSD: 150,000ns
+- HDD: 10,000,000ns
+- Network Storage: 30,000,000ns
+
+Some DB use **mmap** to use virtual memory (like levelDB LMDB). Some Partially use (like mongoDB SQLite). Moth main stream DB do not use (like MySQL, Oracle).
+
+But, DBMS wants to control things itself and can do a better job (than OS) at it, like:
+
+- Flushing ditry pages to disk in the correct order.
+- Specialized prefetching.
+- Buffer replacement plicy.
+- Thread/process scheduling.
+
+## For Database Storage
+
+**Problem 1:** How the DBMS represents the database in files on disk.
+
+**Problem 2:** How the DBMS manages its memory and move data back-and-forth from disk.
+ 
