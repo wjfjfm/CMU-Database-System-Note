@@ -2,6 +2,10 @@
 
 Note to CMU 15-445 Database System
 
+[Youtube to this Course](https://www.youtube.com/watch?v=1D81vXw2T_w&list=PLSE8ODhjZXjbohkNBWQs_otTrBTrjyohi&index=4)
+
+[Chinese Translation Version](https://www.simtoco.com/#/albums/video?id=1000132)
+
 ## Class 1 : Relation Model
 
 **Relation Algebra**
@@ -134,3 +138,19 @@ But, DBMS wants to control things itself and can do a better job (than OS) at it
 
 **Problem 2:** How the DBMS manages its memory and move data back-and-forth from disk.
  
+Most DB, espesically new DB in current years store database as one or more files on disk.
+
+Early systems in 1980s use custom filesystems on raw storage.
+
+### About Pages
+
+There are three differeent notions of "pages" in a DBMS:
+
+- Hardware Page (usually 4KB)
+- OS Page (usually 4KB)
+- Database Page (512B-16KB)
+  - 4KB: SQLite DB2 Oracle
+  - 8KB: SQL-Server PostgreSQL
+  - 16KB: MySQL
+
+MARK: https://www.simtoco.com/#/albums/video?id=1000132 11:23
