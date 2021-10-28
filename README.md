@@ -137,7 +137,9 @@ But, DBMS wants to control things itself and can do a better job (than OS) at it
 **Problem 1:** How the DBMS represents the database in files on disk.
 
 **Problem 2:** How the DBMS manages its memory and move data back-and-forth from disk.
- 
+
+### File Storage
+
 Most DB, espesically new DB in current years store database as one or more files on disk.
 
 Early systems in 1980s use custom filesystems on raw storage.
@@ -153,4 +155,61 @@ There are three differeent notions of "pages" in a DBMS:
   - 8KB: SQL-Server PostgreSQL
   - 16KB: MySQL
 
-MARK: https://www.simtoco.com/#/albums/video?id=1000132 11:23
+### Tuple Page Storage
+
+![tuple page](graphs/tuple_page.png)
+
+For example, if database want to store tuple into a page, it can have a list of offsets at the front of a page **(we call it slot)**, and use the offset to find the tuples from back of the page.
+
+In PostgresDB, we can get the page-id and slot id by:
+
+``` SQL
+SELECT r.ctid, r.* FROM r
+
+ctid   id   val
+(0,1)  101  aaa
+(0,2)  102  bbb
+```
+
+### Tuple Layout
+
+the order of tuples (usually) depends on the order of CREATE.
+
+Some DBMS can automatically re-order the attributes.
+
+``` SQL
+CREATE TABLE foo (
+  a INT PRIMARY KEY,
+  b INT NOT NULL,
+  c INT,
+  d DOUBLE,
+  e FLOAT
+)
+
+```
+
+![tuple order](graphs/tuple_order.png)
+
+We can also **denormalize (prejoin)** related tuples and store them together in same page.
+
+e.g.
+
+``` SQL
+CREATE TABLE foo (
+  a INT PRIMARY KEY,
+  b INT NOT NULL,
+);
+
+CREATE TABLE bar (
+  c INT PRIMARY KEY,
+  a INT REFERENCES foo(a),
+);
+```
+
+![tuple denormalize](graphs/tuple_denormallize.png)
+
+It (denormalize) can:
+
+- Potentially reduces the amount of I/O for common workload patterns.
+- Can make updates more expensive.
+
