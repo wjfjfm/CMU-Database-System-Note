@@ -192,7 +192,7 @@ CREATE TABLE foo (
 
 We can also **denormalize (prejoin)** related tuples and store them together in same page.
 
-e.g.
+e.g.: RethinkDB, CouchDB, RavenDB
 
 ``` SQL
 CREATE TABLE foo (
@@ -213,3 +213,57 @@ It (denormalize) can:
 - Potentially reduces the amount of I/O for common workload patterns.
 - Can make updates more expensive.
 
+**Record IDs:**
+
+Each tuple is assigned a unique **record identifier**
+
+- Most common: page_id + offset/slot
+- Can also contain file location info
+  
+e.g.: PostgreSQL(CTID 4-bytes) SQLite(ROWID 8-bytes) ORACLE (ROWID)
+
+An application **cannot** rely on these ids to mean anything because it will re-arrange automaticallly be DBMS.
+
+### Log-Structured File Organization
+
+Instead of storing tuples in pages, the DBMS oly stores **log records**
+
+### Decimal
+
+Decimal runs faster than fixpoint number, and, decimal number will not have persicion issue.
+
+**Outer Files:**
+
+Store the path of file in tuple and store the file in file system outside the tuple.
+
+Also can use BLOB(Binary Large Object) to store file inside pages. Usually we only treat files smaller than 256KB using this method.
+
+### Metadata
+
+Metadata stores the schema info of a table.
+
+Databases can use SQL cmd to get the metadata of a table.
+
+### Database Storage Models
+
+![wikipedia_example](graphs/wikipedia_example.png)
+
+**OLTP:** On-line Transaction Processing
+
+- Simple queries that read/update a small amount of data that is related to a single entity in the database.
+
+e.g.: ![OLTP](graphs/OLTP.png)
+
+**OLAP:** On-line Analytical Processing
+
+- Complex queries that read large portions of the database spanning multiple entities.
+
+e.g.: ![OLAP](graphs/OLAP.png)
+
+**Decomposition Storage Model (DSM):**
+
+The DBMS stores the values of a single attribute for all tuples contiguously in a page. Known as a "column store".
+
+![column store](graphs/column_store.png)
+
+ 
