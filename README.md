@@ -266,4 +266,22 @@ The DBMS stores the values of a single attribute for all tuples contiguously in 
 
 ![column store](graphs/column_store.png)
 
- 
+**Column Storge Tuple Identifications:**
+
+Choice 1: Fixed-length Offsets
+
+Each value have a same length.
+
+![fixed offsets](graphs/fixed_offsets.png)
+
+Choice 2: Embedded Ids
+
+Each value is stored with its tuple id. (Rarely used recently)
+
+![embedded ids](graphs/embedded_ids.png)
+
+
+
+
+
+
