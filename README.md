@@ -280,8 +280,28 @@ Each value is stored with its tuple id. (Rarely used recently)
 
 ![embedded ids](graphs/embedded_ids.png)
 
+OLTP = Row Store
 
+OLAP = Column Store
 
+**Two main problem of Database Storage：**
 
+- #1: How the DBMS represents the database in files on disk. (This section)
+- #2: How the DBMS manage its memory and move data back-and-forth from disk. (Next section: Buffer Pools)
 
+## Buffer Pools
+
+**Locks vs. Latches:**
+
+Locks:
+
+- Protects the database's logical contents from other transations.
+- Held for transactions duration.
+- Need to be able to rollback changes.
+
+Latches (Mutex):
+
+- Protects the critical sections of the DBMS's internal data structrue from other threads
+- Held for operation duration
+- Do not need to be able to roll back changes
 
