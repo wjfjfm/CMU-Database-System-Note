@@ -291,6 +291,33 @@ OLAP = Column Store
 
 ## Buffer Pools
 
+We cannot read/write/modify data directly on Disk. We should move pages into memory.
+
+So we have two main problem to think:
+
+Spatial Control:
+
+- Where to write pages on disk
+- The goal is to keep pages that are used together often as physically close together as possible on disk
+
+Temporal Control:
+
+- When to read pages into memory, and when to write them to disk.
+- The goal is minimize the number of stalls from having to read data from disk
+
+### Bufer Pool Organization
+
+We use **page table** to kepps track of pages that are currently in memory.
+
+Also maintains additional meta-data per page:
+
+- Dirty Flag (Modified, should flash to disk)
+- Pin/Reference Counter (reading, cannot removed from memory)
+
+If need to read a page not in memory, we should add a **latch** to Page Table in this page. In case of other people put this page in another **frame** in Buffer Pool.
+
+![buffer pool](graphs/buffer_pool.png)
+
 **Locks vs. Latches:**
 
 Locks:
@@ -305,3 +332,30 @@ Latches (Mutex):
 - Held for operation duration
 - Do not need to be able to roll back changes
 
+**Page Table vs. Page Directory:**
+
+**Page Directory** is the mapping from page ids to page locations in the database files.
+
+- All changes must be recorded on disk to  allow the DBMS to find on restart.
+
+**Page Table** is the mapping from page ids to a copy of the page in buffer pool frames.
+
+- This is an in-memory data structure that does not need to be stored on disk.
+
+**Multiple Buffer Pools:**
+
+The DBMS does not always have a single buffer pool for the entire system.
+
+- Multiple buffer pool instance (maybe by hash)
+- Per-database buffer pool
+- Per-page type buffer pool
+
+Using multiple buffer pool can lower the latch conflict, and can have better locality.
+
+**Scan Sharing:**
+
+If two Query scan same/simular pages, if they scan seprately, pages may read into buffer pool two/more times.
+
+If we can share the scan, read pages into buffer pool and let multiple query to read them, then after it, switch them out and read new pages, we can lower the IO of disk.
+
+MARK: https://www.simtoco.com/#/albums/video?id=1000151 0:0
