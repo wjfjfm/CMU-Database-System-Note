@@ -342,6 +342,13 @@ Latches (Mutex):
 
 - This is an in-memory data structure that does not need to be stored on disk.
 
+### Buffer Pool Optimization
+
+- Multiple Buffer Pools
+- Pre-fetching
+- Scan Sharing
+- Buffer Pool Bypass
+
 **Multiple Buffer Pools:**
 
 The DBMS does not always have a single buffer pool for the entire system.
@@ -358,4 +365,20 @@ If two Query scan same/simular pages, if they scan seprately, pages may read int
 
 If we can share the scan, read pages into buffer pool and let multiple query to read them, then after it, switch them out and read new pages, we can lower the IO of disk.
 
-MARK: https://www.simtoco.com/#/albums/video?id=1000151 0:0
+**Buffer Pool Bypass:**
+
+The sequential scan operator will not store fetched pages in the buffer pool to avoid overhead.
+
+- Memory is local to running query.
+- Works well if operator needs to read a large sequence of pages that are contiguous on disk.
+- Can also be used for temporary data (sorting, joins).
+
+Supported by most DBMS for example Oracle SQL-Server PostgreSQL.
+
+Called "Light Scans" in Informix.
+
+### Buffer Pool Replacement Policies
+
+LRU: common
+
+Clock: 
