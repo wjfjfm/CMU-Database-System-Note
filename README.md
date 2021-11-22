@@ -382,3 +382,49 @@ Called "Light Scans" in Informix.
 LRU: common
 
 Clock: 
+
+## Hash Table
+
+**Difference speed to different Hash Functions**
+
+like MurmurHash XXHash(Facebook) CityHash/FarmHash(Google)
+
+(XXHash2.0/3.0 has to fastest score)
+
+The throwput to hashed differ by the length of bit of keys, （而且呈现周期规律, 因为cache的容量关系，如果恰好能填满cache，速度最快)
+
+**Way to solve hash collision and delete key-value after collision**
+
+Two way:
+
+- mark a tombStone on deleted slot
+- move values after this slot up (very complicated)
+
+**Non-Unique Keys**
+
+- Store values in separete storage area for each key.
+- Store duplicate keys entries together in the hash table.
+
+**Robinhood Hashing**
+
+to better solve the collision issue.
+
+save a variable of **distance from value to its target slot** of every value.
+
+When collision, scan down and find a slot with lower **distance**, swap into it and continue find a slot to save the value just swaped out.
+
+**Cuckoo Hashing**
+
+Another way to solve collision.
+
+Use multiple hash tables with different hash function seeds.
+
+- On insert, check every table and pick anyone that has a free slot.
+- If no table has a free slot, evict the element from one of them and then re-hash it find a new location.
+
+Look-ups and deletions are always O(1) because only one location per hash table is checked.
+
+
+
+
+ 
