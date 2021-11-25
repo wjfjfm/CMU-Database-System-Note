@@ -405,6 +405,8 @@ Two way:
 - Store values in separete storage area for each key.
 - Store duplicate keys entries together in the hash table.
 
+### Static Hash Tables
+
 **Robinhood Hashing**
 
 to better solve the collision issue.
@@ -423,6 +425,79 @@ Use multiple hash tables with different hash function seeds.
 - If no table has a free slot, evict the element from one of them and then re-hash it find a new location.
 
 Look-ups and deletions are always O(1) because only one location per hash table is checked.
+
+### Dynamic Hash Tables
+
+## Chained Hashing
+
+**Extenable Hashing**
+
+Use a global counter to mark **how many bits we use to map hash(keys)**
+
+![hash buckets](graphs/hash_buckets.png)
+
+When buckets goes full, we can divide buckets.
+
+**Linear Hashing**
+
+## Tree Index
+
+### B+ Tree
+
+"Best index for DB"
+
+How to insert/delete is very common so pass it
+
+**In Practice:**
+
+Typical Fill-Factor: 67%
+
+Typical Capacities:
+
+- Height 4: 1334 = 312,900,721 entries
+- Height 3: 1333 = 2,406,104 entries
+
+Pages per level:
+
+- Level 1 =      1 pages =   8 KB
+- Level 2 =    134 pages =   1 MB
+- Level 3 = 17,956 pages = 140 MB
+
+**Clustered Index**
+
+The table is stored in the sort order specified by the primary key.
+
+**Node Size of B+ Tree**
+
+The slower the storage device, the larger the optimal node size for a B+ Tree.
+
+- HDD: 1MB
+- SSD: 10KB
+- In-Memory: 512B
+
+Optimal sizes can vary depending on the workload
+
+- Leaf Node Scans vs. Root-to-Leaf Traversals
+
+**Variable Length Key**
+
+Approach #1: Printers (very costy)
+
+- Store the keys as pointers to the tuple's attribute
+
+Approach #2: Varaible Length Nodes (Use in a memory database in history)
+
+- The size of each node in the index can vary
+- Requires carefull memory management
+
+Approach #3: Padding (easy and common)
+
+- Always pad the key to be max length of the key type
+
+Appraoch #4: Key Map / Indirection
+
+- Embed an array of pointers that map to the key + value list within the node.
+
 
 
 
