@@ -481,11 +481,11 @@ Optimal sizes can vary depending on the workload
 
 **Variable Length Key**
 
-Approach #1: Printers (very costy)
+Approach #1: Printers (very costy, Use in a memory database in history)
 
 - Store the keys as pointers to the tuple's attribute
 
-Approach #2: Varaible Length Nodes (Use in a memory database in history)
+Approach #2: Varaible Length Nodes 
 
 - The size of each node in the index can vary
 - Requires carefull memory management
@@ -498,7 +498,53 @@ Appraoch #4: Key Map / Indirection
 
 - Embed an array of pointers that map to the key + value list within the node.
 
+**Non-Unique Indexed**
 
+Approach #1: same as Unique keys, just duplicate it.
+
+Approach #2: key points to a list of values
+
+**Intra-Node Search**
+
+#1: Linear Search
+
+#2: Binary Search
+
+#3: Interpolation (calculate an approximate location and start from that)
+
+**Prefix Compression**
+
+Sorted keys in the same leaf node are likey to have the same prefix.
+
+Instead of storing the entire key each time, extract common prefix and store only unique suffix for each key.
+
+![prefix](graphs/prefix_compression.png)
+
+**Suffix Truncation**
+
+The keys in the inner nodes are only used to "direct traffix"
+
+- We don't need the entire key.
+
+Store a **minimun prefix** that is needed to correctly route probes into the index.
+
+Origin:
+
+![suffix](graphs/suffix_truncation_origin.png)
+
+Suffix Truncation:
+
+![suffix](graphs/suffix_truncation_after.png)
+
+**Bulk Insert**
+
+The fastest/best way to build a B+ Tree is to first sort the keys and then build the index from the bottom up.
+
+**Pointer Swizzling**
+
+Nodes use page ids to reference other noeds in the index. The DBMS must get the memory location from the page table during traversal.
+
+If a page is pinned in the buffer pool, then we 
 
 
 
